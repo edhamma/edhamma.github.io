@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDhamma Cross-reference Redirection</title>
+    <script>
+        // Hard-coded dictionary mapping book identifiers to their objects.inv URLs
+        const BOOK_URLS = {
+            vism: 'https://edhamma.github.io/vism/sphinx/build/html',
+            vimm: 'https://edhamma.github.io/vism/sphinx-vimm/build/html',
+            mctb2: 'https://edhamma.github.io/mctb2/sphinx-mctb2/build/html'
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js"></script>
+    <script src="xref.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
+    <style>dt { font-weight:bold; } body {margin: 8%; font-family:'Lora'; } </style>
+</head>
+<body>
+    <p id="status">Resolving reference…</p>
+</body>
+</html>
