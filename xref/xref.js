@@ -14,18 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
         const arrayBuffer = await response.arrayBuffer();
         const dataBuffer = new Uint8Array(arrayBuffer);
-        const textDecoder = new TextDecoder();
         let compOffset = -1;
         // find compressed data; will fail on non-compressed objects.inv
         for (let i = 0; i < dataBuffer.length; i++) {
             // newline followed by zlib magic byte
-            if (dataBuffer[i]==0x0a && dataBuffer[i+1]==0x78) compOffset=i+1;
+            if (dataBuffer[i]==0x0a && dataBuffer[i+1]==0x78){ compOffset=i+1; break; }
         }
         if (compOffset === -1) { throw new Error('No compressed data found in objects.inv file.'); }
         const compData = dataBuffer.slice(compOffset);
         // Decompress the data using pako
         const decompData = pako.inflate(compData);
         // Decode the decompressed data as text
+        const textDecoder = new TextDecoder();
         const textData = textDecoder.decode(decompData);
         const lines = textData.split('\n');
         const inventory = {};
@@ -37,9 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (parts.length < 4) continue;
             const name = parts[0];
             const location = parts[3];
-            const displayName = parts[4] !== '-' ? parts[4] : '';
+            if(location.endsWith('$')){ url = location.slice(0,-1) + name; }
+            else { url = location; }
+            // const displayName = parts[4] !== '-' ? parts[4] : '';
+            // console.log(parts);
             // Construct URL with fragment if displayName exists
-            const url = location + (displayName ? `#${displayName}` : '');
+            // const url = location + (displayName ? `#${displayName}` : '');
             inventory[name] = url;
         }
         return inventory;
